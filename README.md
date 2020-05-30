@@ -1,4 +1,4 @@
-# news-project-
+# news-project-api
 
 Версия проекта: v 0.0.1
 
