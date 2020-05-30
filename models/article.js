@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const { INVALID_LINK } = require('../errors');
+const { INVALID_LINK } = require('../errors-const');
 
 const articleSchema = new mongoose.Schema({
   keyword: {

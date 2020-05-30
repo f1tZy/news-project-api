@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const userModel = require('../models/user');
 const { JWT_SECRET } = require('../config/config');
 const { NotFoundError, UnauthorizedError } = require('../status_errors');
+const { INVALID_EMAIL_OR_PASS, AUTH_SUCCES, USER_NOT_FOUND } = require('../errors-const');
 
 module.exports.createUser = (req, res, next) => {
   const {
@@ -36,16 +37,16 @@ module.exports.login = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: true,
-      }).send({ message: 'Авторизация прошла успешно' });
+      }).send({ message: AUTH_SUCCES });
     })
-    .catch(() => next(new UnauthorizedError('Неправильные почта или пароль')));
+    .catch(() => next(new UnauthorizedError(INVALID_EMAIL_OR_PASS)));
 };
 
 module.exports.getUser = (req, res, next) => {
   userModel.findById(req.user._id)
     .then((user) => {
       if (user === null) {
-        throw new NotFoundError('Такой пользователь не найден');
+        throw new NotFoundError(USER_NOT_FOUND);
       }
       return res.send({ data: user });
     })

@@ -1,5 +1,6 @@
 const articleModel = require('../models/article');
 const { ForbiddenError, NotFoundError } = require('../status_errors');
+const { ARTICLE_NOT_FOUND, NOT_AUTHOR } = require('../errors-const');
 
 module.exports.createArticle = (req, res, next) => {
   const {
@@ -15,7 +16,7 @@ module.exports.createArticle = (req, res, next) => {
 };
 
 module.exports.getAllArticles = (req, res, next) => {
-  articleModel.find({ owner: req.user._id })
+  articleModel.find({})
     .populate('owner')
     .then((articles) => res.send({ data: articles }))
     .catch(next);
@@ -27,10 +28,10 @@ module.exports.deleteArticle = (req, res, next) => {
     .select('+owner')
     .then((article) => {
       if (article === null) {
-        throw new NotFoundError('Невозможно удалить статью, статья не найдена');
+        throw new NotFoundError(ARTICLE_NOT_FOUND);
       }
       if (!article.owner.equals(req.user._id)) {
-        throw new ForbiddenError('Нет доступа для удаления статьи. Вы не создавали статью');
+        throw new ForbiddenError(NOT_AUTHOR);
       }
       return articleModel.remove(article)
         .then(() => res.status(200).send({ data: article }));

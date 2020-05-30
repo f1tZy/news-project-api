@@ -3,7 +3,7 @@ const validator = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcryptjs');
 
-const { INVALID_EMAIL, NOT_UNIQUE_EMAIL } = require('../errors');// ошибки с errors.js
+const { INVALID_EMAIL, NOT_UNIQUE_EMAIL, INVALID_EMAIL_OR_PASS } = require('../errors-const');// ошибки с errors.js
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -33,13 +33,13 @@ userSchema.statics.findUsersData = function checkUser(email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        return Promise.reject(new Error(INVALID_EMAIL_OR_PASS));
       }
 
       return bcrypt.compare(password, user.password)
         .then((isMatch) => {
           if (!isMatch) {
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            return Promise.reject(new Error(INVALID_EMAIL_OR_PASS));
           }
 
           return user;

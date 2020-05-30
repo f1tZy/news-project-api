@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 const { requestLogger, errorLogger } = require('./middlewares/logs');
 const { errorHandler } = require('./middlewares/error-handler');
 const NotFoundError = require('./status_errors/not_found');
@@ -14,14 +13,9 @@ const router = require('./routes/index');// роутер карточек и п�
 const { PORT, DATA_URL } = require('./config/config');
 const { login, createUser } = require('./controllers/users');// авторизация и регистрация пользователя
 const { signInValid, signUpValid } = require('./middlewares/validation');
-
+const limite = require('./middlewares/rate_limiter');// limiter из отдельного файла
 
 const app = express();
-
-const limite = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
 
 // подключаем лимит для ограничения запросов nginx
 app.use(limite);

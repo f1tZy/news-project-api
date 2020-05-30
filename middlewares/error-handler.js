@@ -1,4 +1,4 @@
-const { SERVER_ERROR } = require('../errors');
+const { SERVER_ERROR } = require('../errors-const');
 
 // eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
