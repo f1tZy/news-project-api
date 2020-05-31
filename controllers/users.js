@@ -44,11 +44,7 @@ module.exports.login = (req, res, next) => {
 
 module.exports.getUser = (req, res, next) => {
   userModel.findById(req.user._id)
-    .then((user) => {
-      if (user === null) {
-        throw new NotFoundError(USER_NOT_FOUND);
-      }
-      return res.send({ data: user });
-    })
+    .orFail(() => { throw new NotFoundError(USER_NOT_FOUND); })
+    .then((user) => res.send({ data: user }))
     .catch(next);
 };
