@@ -4,6 +4,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcryptjs');
 
 const { INVALID_EMAIL, NOT_UNIQUE_EMAIL, INVALID_EMAIL_OR_PASS } = require('../errors-const');// ошибки с errors.js
+const { ConflictError } = require('../status_errors/index');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -25,7 +26,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.plugin(uniqueValidator, NOT_UNIQUE_EMAIL);
+userSchema.plugin(uniqueValidator, new ConflictError(NOT_UNIQUE_EMAIL));
 userSchema.path('email').validate(validator.isEmail, INVALID_EMAIL);
 
 // проверяем данные пользователя

@@ -7,12 +7,11 @@ const { errors } = require('celebrate');
 const helmet = require('helmet');
 const { requestLogger, errorLogger } = require('./middlewares/logs');
 const { errorHandler } = require('./middlewares/error-handler');
-const NotFoundError = require('./status_errors/not_found');
+
 
 const router = require('./routes/index');// роутер карточек и пользователя
 const { PORT, DATA_URL } = require('./config/config');
-const { login, createUser } = require('./controllers/users');// авторизация и регистрация пользователя
-const { signInValid, signUpValid } = require('./middlewares/validation');
+
 const limite = require('./middlewares/rate_limiter');// limiter из отдельного файла
 
 const app = express();
@@ -41,17 +40,6 @@ app.use(requestLogger);
 
 // общий запрос на роутер
 app.use(router);
-
-// запрос на логин, и тут же валидация через joi
-app.post('/signin', signInValid, login);
-
-// запрос на регистрацию пользователя, и тут же валидация через joi
-app.post('/signup', signUpValid, createUser);
-
-// ошибка на не существующий ресурс
-app.use('*', (req, res, next) => {
-  next(new NotFoundError('Запрашиваемый ресурс не найден'));
-});
 
 // логи ошибок
 app.use(errorLogger);

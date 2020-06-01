@@ -1,6 +1,6 @@
 const articleModel = require('../models/article');
-const { ForbiddenError, NotFoundError } = require('../status_errors');
-const { ARTICLE_NOT_FOUND, NOT_AUTHOR } = require('../errors-const');
+const { ForbiddenError, NotFoundError, BadRequestError } = require('../status_errors');
+const { ARTICLE_NOT_FOUND, NOT_AUTHOR, BAD_REQ } = require('../errors-const');
 
 module.exports.createArticle = (req, res, next) => {
   const {
@@ -26,15 +26,18 @@ module.exports.getAllArticles = (req, res, next) => {
 module.exports.deleteArticle = (req, res, next) => {
   articleModel.findById(req.params.id)
     .select('+owner')
+    .orFail(() => { throw new NotFoundError(ARTICLE_NOT_FOUND); })
     .then((article) => {
-      if (article === null) {
-        throw new NotFoundError(ARTICLE_NOT_FOUND);
-      }
       if (!article.owner.equals(req.user._id)) {
         throw new ForbiddenError(NOT_AUTHOR);
       }
       return articleModel.remove(article)
         .then(() => res.status(200).send({ data: article }));
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new BadRequestError(BAD_REQ));
+      }
+      return next(err);
+    });
 };

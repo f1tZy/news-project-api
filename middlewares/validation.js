@@ -1,6 +1,15 @@
 const { celebrate, Joi } = require('celebrate');
 const {
-  INVALID_LINK, PASS_ERROR, INVALID_EMAIL, WRONG_CONTENT, INVALID_NAME, ID_LENGTH,
+  INVALID_LINK,
+  PASS_ERROR,
+  INVALID_EMAIL,
+  WRONG_KEYWORD,
+  INVALID_NAME,
+  ID_LENGTH,
+  WRONG_TITLE,
+  WRONG_TEXT,
+  WRONG_DATE,
+  WRONG_SOURSE,
 } = require('../errors-const');
 
 const signInValid = celebrate({
@@ -27,11 +36,11 @@ const articleDeleteValid = celebrate({
 
 const articleСreationValid = celebrate({
   body: Joi.object().keys({
-    keyword: Joi.string().min(2).required().error(new Error(`${WRONG_CONTENT}${' ключевого поля'}`)),
-    title: Joi.string().min(2).required().error(new Error(`${WRONG_CONTENT}${' названия'}`)),
-    text: Joi.string().min(2).required().error(new Error(`${WRONG_CONTENT}${' текста'}`)),
-    date: Joi.string().min(2).required().error(new Error(`${WRONG_CONTENT}${' даты'}`)),
-    source: Joi.string().min(2).required().error(new Error(`${WRONG_CONTENT}${' ссылки ресурса'}`)),
+    keyword: Joi.string().min(2).required().error(new Error(WRONG_KEYWORD)),
+    title: Joi.string().min(2).required().error(new Error(WRONG_TITLE)),
+    text: Joi.string().min(2).required().error(new Error(WRONG_TEXT)),
+    date: Joi.string().min(2).required().error(new Error(WRONG_DATE)),
+    source: Joi.string().min(2).required().error(new Error(WRONG_SOURSE)),
     link: Joi.string().uri().required().regex(/(http(s)?:\/\/)?([a-z0-9-]{2,}\.(.[a-z0-9]+)+|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})(:[0-9]+)?(\/.*)?/)
       .error(new Error(INVALID_LINK)),
     image: Joi.string().uri().required().regex(/(http(s)?:\/\/)?([a-z0-9-]{2,}\.(.[a-z0-9]+)+|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})(:[0-9]+)?(\/.*)?/)

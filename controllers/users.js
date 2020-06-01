@@ -3,8 +3,10 @@ const jwt = require('jsonwebtoken');
 
 const userModel = require('../models/user');
 const { JWT_SECRET } = require('../config/config');
-const { NotFoundError, UnauthorizedError } = require('../status_errors');
-const { INVALID_EMAIL_OR_PASS, AUTH_SUCCES, USER_NOT_FOUND } = require('../errors-const');
+const { NotFoundError, UnauthorizedError, ConflictError } = require('../status_errors');
+const {
+  INVALID_EMAIL_OR_PASS, AUTH_SUCCES, USER_NOT_FOUND, NOT_UNIQUE_EMAIL, CREATE_USER_ERROR,
+} = require('../errors-const');
 
 module.exports.createUser = (req, res, next) => {
   const {
@@ -23,7 +25,13 @@ module.exports.createUser = (req, res, next) => {
         name: user.name,
       });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.errors.email) {
+        next(new ConflictError(NOT_UNIQUE_EMAIL));
+        return;
+      }
+      next(new Error(CREATE_USER_ERROR));
+    });
 };
 
 module.exports.login = (req, res, next) => {
