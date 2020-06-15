@@ -45,7 +45,7 @@ module.exports.login = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: true,
-      }).send({ message: AUTH_SUCCES });
+      }).send({ message: AUTH_SUCCES, jwt: token });
     })
     .catch(() => next(new UnauthorizedError(INVALID_EMAIL_OR_PASS)));
 };

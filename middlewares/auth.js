@@ -5,7 +5,11 @@ const { UnauthorizedError } = require('../status_errors');
 const { AUTH_ERROR } = require('../errors-const');
 
 module.exports = (req, res, next) => {
-  const token = req.cookies.jwt;
+  let token = req.cookies.jwt;
+  const { userToken } = req.headers;
+  if (userToken.startsWith('Bearer ') && userToken) {
+    token = userToken.replace('Bearer ', '');
+  }
 
   if (!token) { throw new UnauthorizedError(AUTH_ERROR); }
 
