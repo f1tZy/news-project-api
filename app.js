@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
+const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logs');
 const { errorHandler } = require('./middlewares/error-handler');
 
@@ -16,16 +17,11 @@ const limite = require('./middlewares/rate_limiter');// limiter из отдел�
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Token');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
+app.use(cors({
+  origin: '*',
+  credentials: true,
+}));
+
 // подключаем лимит для ограничения запросов nginx
 app.use(limite);
 
