@@ -16,8 +16,9 @@ module.exports.createArticle = (req, res, next) => {
 };
 
 module.exports.getAllArticles = (req, res, next) => {
-  articleModel.find({})
-    .populate('owner')
+  const { _id: userId } = req.user;
+
+  articleModel.find({ owner: userId })
     .then((articles) => res.send({ data: articles }))
     .catch(next);
 };
