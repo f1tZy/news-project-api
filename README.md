@@ -3,17 +3,32 @@
 Версия проекта: v 0.0.1
 
 ## Описание:
-Реализован backend проекта news-api. Проект сохраняет данные пользователей и их статьи.
+Backend проекта news-project. Создание виртуальной машины и деплой проекта на публичный сервер, развертывание сервера на удалённой виртуальной машине. Проект сохраняет данные пользователей и их статьи. 
 
-* Backend на поддомене: https://api.news-project.gq/
+## [Ссылка на backend](https://api.news-project.gq/)
+
+## Стек: Node.js, Express.js, MongoDB.
 
 ## Инструкция как развернуть проект:
+* Скопировать репозиторий 
+```sh
+git clone https://github.com/f1tZy/Regular-Expressions.git
+```
 
-npm install - установить зависимости.
+* Установить зависимости
+```sh
+npm install
+```
 
-npm run start - запускает live-server по адресу http://localhost:3000.
+* Запускает live-server по адресу http://localhost:3000.
+```sh
+npm run start
+```
 
-npm run dev - запускает live-server с hot-reload(nodemon).
+* Запускает live-server в режиме разработки с hot-reload(nodemon).
+```sh
+npm run dev
+```
 
 * Запрос POST /signup создаёт пользователя;
 * Запрос POST /signin вход пользователя;
