@@ -12,7 +12,7 @@ Backend проекта news-project. Создание виртуальной м�
 ## Инструкция как развернуть проект:
 * Скопировать репозиторий 
 ```sh
-git clone https://github.com/f1tZy/Regular-Expressions.git
+git clone https://github.com/f1tZy/news-project-api.git
 ```
 
 * Установить зависимости
